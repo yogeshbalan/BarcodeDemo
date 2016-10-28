@@ -50,7 +50,22 @@ public class ScannerActivity extends BaseActivity implements ZBarScannerView.Res
     public void handleResult(Result result) {
         Toast.makeText(this, "Contents = " + result.getContents() +
                 ", Format = " + result.getBarcodeFormat().getName(), Toast.LENGTH_SHORT).show();
-        startLoadingAnimation();
+
+        if (result.getBarcodeFormat().getName().equalsIgnoreCase("EAN13")) {
+            //Toast.makeText(this, "first", Toast.LENGTH_SHORT).show();
+            startLoadingAnimation(1);
+        } else if (result.getBarcodeFormat().getName().equalsIgnoreCase("databar")) {
+            //Toast.makeText(this, "second", Toast.LENGTH_SHORT).show();
+            startLoadingAnimation(2);
+        } else if (result.getBarcodeFormat().getName().equalsIgnoreCase("I25")) {
+            //Toast.makeText(this, "third", Toast.LENGTH_SHORT).show();
+            startLoadingAnimation(3);
+        } else if (result.getBarcodeFormat().getName().equalsIgnoreCase("qrcode")) {
+            //Toast.makeText(this, "fourth", Toast.LENGTH_SHORT).show();
+            startLoadingAnimation(4);
+        }
+
+        //startLoadingAnimation();
         // Note:
         // * Wait 2 seconds to resume the preview.
         // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
@@ -64,19 +79,19 @@ public class ScannerActivity extends BaseActivity implements ZBarScannerView.Res
         }, 500);
     }
 
-    public void startLoadingAnimation() {
+    public void startLoadingAnimation(int index) {
         loadingLayout.setVisibility(View.VISIBLE);
         ImageView imageView = (ImageView) findViewById(R.id.load_img);
         GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(imageView);
         //Glide.with(this).load(R.raw.loading_two).into(imageViewTarget);
-        int randomNumber = randInt(0, 100);
-        if (randomNumber < 25) {
+
+        if (index == 1) {
             Glide.with(this).load(R.raw.loading_one).into(imageViewTarget);
-        } else if (randomNumber < 50 && randomNumber >= 25) {
+        } else if (index == 2) {
             Glide.with(this).load(R.raw.loading_two).into(imageViewTarget);
-        } else if (randomNumber < 75 && randomNumber >= 50) {
+        } else if (index == 3) {
             Glide.with(this).load(R.raw.loading_three).into(imageViewTarget);
-        } else {
+        } else if (index == 4){
             Glide.with(this).load(R.raw.loading_four).into(imageViewTarget);
         }
     }
